@@ -83,11 +83,9 @@ class Chef
         def install_via_gem_command(name, version = nil)
           src            = @new_resource.source && "  --source=#{@new_resource.source} --source=http://rubygems.org"
           version_option = (version.nil? || version.empty?) ? "" : " -v \"#{version}\""
-          rubygem_version = %x|gem --version| || '2'
-          rdoc_flags = rubygem_version.to_i >= 3 ? '--no-document' : '--no-rdoc --no-ri'
 
           shell_out!(
-            "#{gem_binary_path} install #{name} -q #{rdoc_flags} #{version_option} #{src}#{opts}",
+            "#{gem_binary_path} install #{name} -q --no-document #{version_option} #{src}#{opts}",
             :user => node[:rbenv][:user],
             :group => node[:rbenv][:group],
             :env => {
